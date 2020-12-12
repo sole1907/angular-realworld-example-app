@@ -1,45 +1,170 @@
 <div class="auth-page">
   <div class="container page">
     <div class="row">
-
       <div class="col-md-6 offset-md-3 col-xs-12">
         <h1 class="text-xs-center">{{ title }}</h1>
         <p class="text-xs-center">
-          <a [routerLink]="['/login']" *ngIf="authType == 'register'">Have an account?</a>
-          <a [routerLink]="['/register']" *ngIf="authType == 'login'">Need an account?</a>
+          <a [routerLink]="['/login']" *ngIf="authType == 'register'"
+            >Have an account?</a
+          >
+          <a [routerLink]="['/register']" *ngIf="authType == 'login'"
+            >Need an account?</a
+          >
         </p>
         <app-list-errors [errors]="errors"></app-list-errors>
         <form [formGroup]="authForm" (ngSubmit)="submitForm()">
           <fieldset [disabled]="isSubmitting">
-            <fieldset class="form-group">
+            <div *ngIf="authType == 'register'">
+              <h1 class="lined-header">Organisation Details</h1>
+              <p></p>
+            </div>
+            <label class="info">* Required Fields</label>
+            <fieldset class="form-group" *ngIf="authType == 'register'">
               <input
-                formControlName="username"
-                placeholder="Username"
+                formControlName="organisationName"
+                placeholder="*Organisation Name"
                 class="form-control form-control-lg"
                 type="text"
-                *ngIf="authType == 'register'" />
+              />
+              <span class="label error" *ngIf="formErrors.organisationName">{{
+                formErrors.organisationName
+              }}</span>
+            </fieldset>
+            <fieldset class="form-group" *ngIf="authType == 'register'">
+              <input
+                formControlName="registrationNumber"
+                placeholder="*Company Registration Number"
+                class="form-control form-control-lg"
+                type="text"
+              />
+            </fieldset>
+            <fieldset class="form-group" *ngIf="authType == 'register'">
+              <textarea
+                class="form-control"
+                formControlName="bio"
+                rows="5"
+                placeholder="*Tell us about your organisation"
+              ></textarea>
+            </fieldset>
+            <fieldset class="form-group" *ngIf="authType == 'register'">
+              <input
+                formControlName="address"
+                placeholder="*Street Address"
+                class="form-control form-control-lg"
+                type="text"
+              />
+            </fieldset>
+            <fieldset class="form-group" *ngIf="authType == 'register'">
+              <input
+                formControlName="city"
+                placeholder="*City"
+                class="form-control form-control-lg"
+                type="text"
+              />
+            </fieldset>
+            <fieldset class="form-group" *ngIf="authType == 'register'">
+              <input
+                formControlName="website"
+                placeholder="Website Address"
+                class="form-control form-control-lg"
+                type="text"
+              />
+              <span class="label error" *ngIf="formErrors.website">{{
+                formErrors.website
+              }}</span>
+            </fieldset>
+            <fieldset class="form-group" *ngIf="authType == 'register'">
+              <input
+                formControlName="contactEmail"
+                placeholder="*Contact Email Address"
+                class="form-control form-control-lg"
+                type="text"
+              />
+              <span class="label error" *ngIf="formErrors.contactEmail">{{
+                formErrors.contactEmail
+              }}</span>
+            </fieldset>
+            <fieldset class="form-group" *ngIf="authType == 'register'">
+              <input
+                formControlName="phone"
+                placeholder="*Contact Phone"
+                class="form-control form-control-lg"
+                type="text"
+              />
+              <span class="label error" *ngIf="formErrors.phone">{{
+                formErrors.phone
+              }}</span>
+            </fieldset>
+            <div *ngIf="authType == 'register'">
+              <p></p>
+              <h1 class="lined-header">Setup Login Details</h1>
+              <p></p>
+            </div>
+            <fieldset class="form-group" *ngIf="authType == 'register'">
+              <input
+                formControlName="firstName"
+                placeholder="*First Name"
+                class="form-control form-control-lg"
+                type="text"
+              />
+              <span class="label error" *ngIf="formErrors.firstName">{{
+                formErrors.firstName
+              }}</span>
+            </fieldset>
+            <fieldset class="form-group" *ngIf="authType == 'register'">
+              <input
+                formControlName="lastName"
+                placeholder="*Last Name"
+                class="form-control form-control-lg"
+                type="text"
+              />
+              <span class="label error" *ngIf="formErrors.lastName">{{
+                formErrors.lastName
+              }}</span>
+            </fieldset>
+            <fieldset class="form-group" *ngIf="authType == 'register'">
+              <input
+                formControlName="username"
+                placeholder="*Username"
+                class="form-control form-control-lg"
+                type="text"
+              />
+              <span class="label error" *ngIf="formErrors.username">{{
+                formErrors.username
+              }}</span>
             </fieldset>
             <fieldset class="form-group">
               <input
                 formControlName="email"
-                placeholder="Email"
+                placeholder="*Email"
                 class="form-control form-control-lg"
-                type="text" />
+                type="text"
+              />
+              <label class="error" *ngIf="formErrors.email">{{
+                formErrors.email
+              }}</label>
             </fieldset>
             <fieldset class="form-group">
               <input
                 formControlName="password"
-                placeholder="Password"
+                placeholder="*Password"
                 class="form-control form-control-lg"
-                type="password" />
+                type="password"
+              />
+              <label class="error" *ngIf="formErrors.password">{{
+                formErrors.password
+              }}</label>
             </fieldset>
-            <button class="btn btn-lg btn-primary pull-xs-right" [disabled]="!authForm.valid" type="submit">
+            <button
+              class="btn btn-lg btn-primary pull-xs-right"
+              [disabled]="!authForm.valid"
+              type="submit"
+            >
               {{ title }}
             </button>
           </fieldset>
         </form>
       </div>
-
     </div>
   </div>
 </div>

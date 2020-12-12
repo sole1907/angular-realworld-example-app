@@ -1,22 +1,23 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable ,  BehaviorSubject ,  ReplaySubject } from 'rxjs';
+import { Injectable } from "@angular/core";
+import { HttpClient, HttpParams } from "@angular/common/http";
+import { Observable, BehaviorSubject, ReplaySubject } from "rxjs";
 
-import { ApiService } from './api.service';
-import { JwtService } from './jwt.service';
-import { User } from '../models';
-import { map ,  distinctUntilChanged } from 'rxjs/operators';
-
+import { ApiService } from "./api.service";
+import { JwtService } from "./jwt.service";
+import { User, UserListConfig } from "../models";
+import { map, distinctUntilChanged } from "rxjs/operators";
 
 @Injectable()
 export class UserService {
   private currentUserSubject = new BehaviorSubject<User>({} as User);
-  public currentUser = this.currentUserSubject.asObservable().pipe(distinctUntilChanged());
+  public currentUser = this.currentUserSubject
+    .asObservable()
+    .pipe(distinctUntilChanged());
 
   private isAuthenticatedSubject = new ReplaySubject<boolean>(1);
   public isAuthenticated = this.isAuthenticatedSubject.asObservable();
 
-  constructor (
+  constructor(
     private apiService: ApiService,
     private http: HttpClient,
     private jwtService: JwtService
@@ -27,10 +28,9 @@ export class UserService {
   populate() {
     // If JWT detected, attempt to get & store user's info
     if (this.jwtService.getToken()) {
-      this.apiService.get('/user')
-      .subscribe(
-        data => this.setAuth(data.user),
-        err => this.purgeAuth()
+      this.apiService.get("/users/me").subscribe(
+        (data) => this.setAuth(data),
+        (err) => this.purgeAuth()
       );
     } else {
       // Remove any potential remnants of previous auth states
@@ -57,14 +57,13 @@ export class UserService {
   }
 
   attemptAuth(type, credentials): Observable<User> {
-    const route = (type === 'login') ? '/login' : '';
-    return this.apiService.post('/users' + route, {user: credentials})
-      .pipe(map(
-      data => {
-        this.setAuth(data.user);
+    const route = type === "login" ? "/users/login" : "/organisations";
+    return this.apiService.post(route, credentials).pipe(
+      map((data) => {
+        this.setAuth(data);
         return data;
-      }
-    ));
+      })
+    );
   }
 
   getCurrentUser(): User {
@@ -73,13 +72,26 @@ export class UserService {
 
   // Update the user on the server (email, pass, etc)
   update(user): Observable<User> {
-    return this.apiService
-    .put('/user', { user })
-    .pipe(map(data => {
-      // Update the currentUser observable
-      this.currentUserSubject.next(data.user);
-      return data.user;
-    }));
+    return this.apiService.put("/users", user).pipe(
+      map((data) => {
+        // Update the currentUser observable
+        this.currentUserSubject.next(data.user);
+        return data.user;
+      })
+    );
   }
 
+  query(config: UserListConfig): Observable<{ items: User[]; total: number }> {
+    // Convert any filters over to Angular's URLSearchParams
+    const params = {};
+
+    Object.keys(config.filters).forEach((key) => {
+      params[key] = config.filters[key];
+    });
+
+    return this.apiService.get(
+      "/users",
+      new HttpParams({ fromObject: params })
+    );
+  }
 }

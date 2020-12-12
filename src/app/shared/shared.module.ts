@@ -1,13 +1,21 @@
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
+import { CommonModule } from "@angular/common";
+import { NgModule } from "@angular/core";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { HttpClientModule } from "@angular/common/http";
+import { RouterModule } from "@angular/router";
 
-import { ArticleListComponent, ArticleMetaComponent, ArticlePreviewComponent } from './article-helpers';
-import { FavoriteButtonComponent, FollowButtonComponent } from './buttons';
-import { ListErrorsComponent } from './list-errors.component';
-import { ShowAuthedDirective } from './show-authed.directive';
+import {
+  ArticleListComponent,
+  ArticleMetaComponent,
+  ArticlePreviewComponent,
+} from "./article-helpers";
+import { FavoriteButtonComponent, FollowButtonComponent } from "./buttons";
+import { ListErrorsComponent } from "./list-errors.component";
+import { ShowAuthedDirective } from "./show-authed.directive";
+import {
+  DataTableWrapperComponent,
+  DataTablePaginationComponent,
+} from "./data-table";
 
 @NgModule({
   imports: [
@@ -15,7 +23,7 @@ import { ShowAuthedDirective } from './show-authed.directive';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    RouterModule
+    RouterModule,
   ],
   declarations: [
     ArticleListComponent,
@@ -24,7 +32,9 @@ import { ShowAuthedDirective } from './show-authed.directive';
     FavoriteButtonComponent,
     FollowButtonComponent,
     ListErrorsComponent,
-    ShowAuthedDirective
+    ShowAuthedDirective,
+    DataTableWrapperComponent,
+    DataTablePaginationComponent,
   ],
   exports: [
     ArticleListComponent,
@@ -38,7 +48,9 @@ import { ShowAuthedDirective } from './show-authed.directive';
     HttpClientModule,
     ListErrorsComponent,
     RouterModule,
-    ShowAuthedDirective
-  ]
+    ShowAuthedDirective,
+    DataTableWrapperComponent,
+    DataTablePaginationComponent,
+  ],
 })
 export class SharedModule {}
